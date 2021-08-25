@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service
 interface Reward {
     val name : String
     val amout  : Int
-    fun reward(): String
+    fun reward(): Int
 }
 
 interface GoldReward : Reward
@@ -27,8 +27,8 @@ class GoldRewardFactory : RewardFactory {
 
         override val amout: Int = (50..200).random()
 
-        override fun reward(): String {
-            var srt: String = "Награда за убийство босса - $amout золотых"
+        override fun reward(): Int {
+            var srt: Int = amout
             return srt
         }
 
@@ -43,13 +43,15 @@ class PlayerRewardService {
 
     val goldFactory = GoldRewardFactory()
 
-    fun getHello(): String {
+    fun getGoldQuestBoss(): Int {
         var userReward = createReward(goldFactory, "QuestBoss")
         userReward.reward()
 
         return userReward.reward()
+    }
 
-        //val str: String = "Hello service!"
-        //return str
+    fun getHello(): String {
+        val str: String = "Hello service!"
+        return str
     }
 }

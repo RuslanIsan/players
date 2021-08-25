@@ -9,16 +9,19 @@ import org.springframework.web.bind.annotation.*
 class PlayerController (
     private var playerRewardService: PlayerRewardService
         ) {
+    // Выводим Hello Services
     @RequestMapping(value = ["/helloWorld"], method = [(RequestMethod.GET)])
     fun getHelloWordMessage(): ResponseEntity<String> =
         ResponseEntity.ok(
             playerRewardService.getHello()
         )
 
-    @GetMapping("/service")
-    fun playerRewardService() = playerRewardService.getHello()
+    // Выводим Награду за босса
+    @GetMapping("/questBoss")
+    fun playerRewardService() = playerRewardService.getGoldQuestBoss()
 
     // Принимаем коллекцию имен и выводим в json
+    /*
     @RequestMapping(value = ["/player/name={name}"], method = [(RequestMethod.GET)])
     fun getHelloWordMessageWithName(
         @PathVariable("name") name: String
@@ -34,6 +37,25 @@ class PlayerController (
         } else {
             ResponseEntity.badRequest().body("I am Cristian")
         }
+    */
+
+    // Принимаем коллекцию имен и выводим в json
+    @RequestMapping(value = ["/player/name={name}"], method = [(RequestMethod.GET)])
+    fun getHelloWordMessageWithName(
+        @PathVariable("name") name: String
+    ): ResponseEntity<Any> =
+        if (name != "") {
+            ResponseEntity.ok(
+                HelloResponse(
+                    name = name,
+                    reward = "Gold",
+                    amount = playerRewardService.getGoldQuestBoss()
+                )
+            )
+        } else {
+            ResponseEntity.badRequest().body("No name")
+        }
+
 }
 
 data class HelloResponse(
