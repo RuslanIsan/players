@@ -8,5 +8,5 @@ class PlayersApplication
 
 fun main(args: Array<String>) {
 	runApplication<PlayersApplication>(*args)
-	// Test
+	//  23
 }
