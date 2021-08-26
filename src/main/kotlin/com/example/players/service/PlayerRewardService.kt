@@ -55,3 +55,42 @@ class PlayerRewardService {
         return str
     }
 }
+
+@Service
+class PlayerRewardServiceNames {
+    fun createReward(factory: RewardFactory, name : String) : Reward {
+        return factory.getInstance(name)
+    }
+
+    val goldFactory = GoldRewardFactory()
+
+    fun getGoldQuestBoss(): Int {
+        var userReward = createReward(goldFactory, "QuestBoss")
+        userReward.reward()
+
+        return userReward.reward()
+    }
+
+    // Получаем строку имён, распарсиваем её и присваиваем награду
+    fun getPlayer(name: String): List<Any> {
+        var list = mutableListOf<Any>() // Создаём пустой изменяемый ArrayList
+
+        val array = name.split(",").toTypedArray() // Разбиваем строку на массив
+        array.forEach {
+            var userReward = createReward(goldFactory, "QuestBoss") // Генерируем награду
+            val json = PlayerResponse(
+                name = it,
+                reward = "Gold",
+                amount = userReward.reward()
+            ).toString()
+            list.add(json)
+        }
+        return list
+    }
+}
+
+data class PlayerResponse (
+    val name: String,
+    val reward: String,
+    val amount: Int
+)

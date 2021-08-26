@@ -1,13 +1,15 @@
 package com.example.players.controller
 
 import com.example.players.service.PlayerRewardService
+import com.example.players.service.PlayerRewardServiceNames
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api")
 class PlayerController (
-    private var playerRewardService: PlayerRewardService
+    private var playerRewardService: PlayerRewardService,
+    private var playerRewardServiceNames: PlayerRewardServiceNames
         ) {
     // Выводим Hello Services
     @RequestMapping(value = ["/helloWorld"], method = [(RequestMethod.GET)])
@@ -40,17 +42,13 @@ class PlayerController (
     */
 
     // Принимаем коллекцию имен и выводим в json
-    @RequestMapping(value = ["/player/name={name}"], method = [(RequestMethod.GET)])
-    fun getHelloWordMessageWithName(
+    @RequestMapping(value = ["/a/name={name}"], method = [(RequestMethod.GET)])
+    fun getHelloWordMessageWithName2(
         @PathVariable("name") name: String
     ): ResponseEntity<Any> =
         if (name != "") {
             ResponseEntity.ok(
-                HelloResponse(
-                    name = name,
-                    reward = "Gold",
-                    amount = playerRewardService.getGoldQuestBoss()
-                )
+                playerRewardServiceNames.getPlayer(name)
             )
         } else {
             ResponseEntity.badRequest().body("No name")
