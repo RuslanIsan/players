@@ -1,5 +1,6 @@
 package com.example.players.controller
 
+import com.example.players.service.PlayerResponse
 import com.example.players.service.PlayerRewardService
 import com.example.players.service.PlayerRewardServiceNames
 import org.springframework.http.ResponseEntity
@@ -7,12 +8,12 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api")
-class PlayerController (
+class PlayerController(
     private var playerRewardService: PlayerRewardService,
     private var playerRewardServiceNames: PlayerRewardServiceNames
-        ) {
+) {
     // Выводим Hello Services
-    @RequestMapping(value = ["/helloWorld"], method = [(RequestMethod.GET)])
+    @GetMapping("/helloWorld")
     fun getHelloWordMessage(): ResponseEntity<String> =
         ResponseEntity.ok(
             playerRewardService.getHello()
@@ -20,20 +21,14 @@ class PlayerController (
 
     // Выводим Награду за босса
     @GetMapping("/questBoss")
-    fun playerRewardService() = playerRewardService.getGoldQuestBoss()
+    fun playerRewardService() =
+        playerRewardService.getGoldQuestBoss()
 
     // Принимаем GET коллекцию имен и выводим в json
-    @RequestMapping(value = ["/player/name={name}"], method = [(RequestMethod.GET)])
-    fun getNamePlayers(
-        @PathVariable("name") name: String
-    ): ResponseEntity<Any> =
-        if (name != "") {
-            ResponseEntity.ok(
-                playerRewardServiceNames.getPlayer(name)
-            )
-        } else {
-            ResponseEntity.badRequest().body("No name")
-        }
+    @GetMapping("/player")
+    fun getNamePlayers(@RequestParam names: List<String>): List<PlayerResponse> =
+            playerRewardServiceNames.getPlayers(names)
+
 
     // Принимаем POST
     @PostMapping("/search")

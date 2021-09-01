@@ -11,11 +11,11 @@ interface Reward {
 interface GoldReward : Reward
 
 interface RewardFactory {
-    fun getInstance(name : String) : Reward
+    fun getGoldReward(name : String) : Reward
 }
 
 class GoldRewardFactory : RewardFactory {
-    override fun getInstance(name: String) : GoldReward {
+    override fun getGoldReward(name: String) : GoldReward {
         return when (name){
             "QuestBoss" -> QuestBoss()
             else -> throw IllegalArgumentException("Нет класса $name")
@@ -38,7 +38,7 @@ class GoldRewardFactory : RewardFactory {
 @Service
 class PlayerRewardService {
     fun createReward(factory: RewardFactory, name : String) : Reward {
-        return factory.getInstance(name)
+        return factory.getGoldReward(name)
     }
 
     val goldFactory = GoldRewardFactory()
@@ -58,34 +58,28 @@ class PlayerRewardService {
 
 @Service
 class PlayerRewardServiceNames {
-    fun createReward(factory: RewardFactory, name : String) : Reward {
-        return factory.getInstance(name)
-    }
-
-    val goldFactory = GoldRewardFactory()
+    private val goldFactory = GoldRewardFactory()
 
     fun getGoldQuestBoss(): Int {
-        var userReward = createReward(goldFactory, "QuestBoss")
+        val userReward = createReward(goldFactory, "QuestBoss")
         userReward.reward()
 
         return userReward.reward()
     }
 
     // Получаем строку имён, распарсиваем её и присваиваем награду
-    fun getPlayer(name: String): List<Any> {
-        var list = mutableListOf<Any>() // Создаём пустой изменяемый ArrayList
-
-        val array = name.split(",").toTypedArray() // Разбиваем строку на массив
-        array.forEach {
-            var userReward = createReward(goldFactory, "QuestBoss") // Генерируем награду
-            val json = PlayerResponse(
+    fun getPlayers(names: List<String>): List<PlayerResponse> =
+        names.map {
+            val userReward = createReward(goldFactory, "QuestBoss") // Генерируем награду
+            PlayerResponse (
                 name = it,
                 reward = "Gold",
                 amount = userReward.reward()
-            ).toString()
-            list.add(json)
+            )
         }
-        return list
+
+    private fun createReward(factory: RewardFactory, name : String) : Reward {
+        return factory.getGoldReward(name)
     }
 }
 
