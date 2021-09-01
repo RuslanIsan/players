@@ -22,28 +22,9 @@ class PlayerController (
     @GetMapping("/questBoss")
     fun playerRewardService() = playerRewardService.getGoldQuestBoss()
 
-    // Принимаем коллекцию имен и выводим в json
-    /*
+    // Принимаем GET коллекцию имен и выводим в json
     @RequestMapping(value = ["/player/name={name}"], method = [(RequestMethod.GET)])
-    fun getHelloWordMessageWithName(
-        @PathVariable("name") name: String
-    ): ResponseEntity<Any> =
-        if (name != "Cristian") {
-            ResponseEntity.ok(
-                HelloResponse(
-                    name = name,
-                    reward = "Gold",
-                    amount = 123
-                )
-            )
-        } else {
-            ResponseEntity.badRequest().body("I am Cristian")
-        }
-    */
-
-    // Принимаем коллекцию имен и выводим в json
-    @RequestMapping(value = ["/a/name={name}"], method = [(RequestMethod.GET)])
-    fun getHelloWordMessageWithName2(
+    fun getNamePlayers(
         @PathVariable("name") name: String
     ): ResponseEntity<Any> =
         if (name != "") {
@@ -53,6 +34,11 @@ class PlayerController (
         } else {
             ResponseEntity.badRequest().body("No name")
         }
+
+    // Принимаем POST
+    @PostMapping("/search")
+    fun addTask(@RequestBody helloResponse: HelloResponse) = "dsds"
+
 
 }
 
