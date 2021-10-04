@@ -7,31 +7,31 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("api")
 class PlayerController(
     private var playerRewardService: PlayerRewardService,
     private var playerRewardServiceNames: PlayerRewardServiceNames
 ) {
     // Выводим Hello Services
-    @GetMapping("/helloWorld")
+    @GetMapping("helloWorld")
     fun getHelloWordMessage(): ResponseEntity<String> =
         ResponseEntity.ok(
             playerRewardService.getHello()
         )
 
     // Выводим Награду за босса
-    @GetMapping("/questBoss")
+    @GetMapping("questBoss")
     fun playerRewardService() =
         playerRewardService.getGoldQuestBoss()
 
     // Принимаем GET коллекцию имен и выводим в json
-    @GetMapping("/player")
+    @GetMapping("player")
     fun getNamePlayers(@RequestParam names: List<String>): List<PlayerResponse> =
             playerRewardServiceNames.getPlayers(names)
 
 
     // Принимаем POST
-    @PostMapping("/search")
+    @PostMapping("search")
     fun addTask(@RequestBody helloResponse: HelloResponse) = "dsds"
 
 
